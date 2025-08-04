@@ -1,0 +1,93 @@
+<!-- File: /options/options.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Aivi AI Assistant - Options</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="options.css">
+</head>
+<body>
+    <div class="llm-helper-options-container">
+        <div class="llm-helper-options-header">
+            <h1>Aivi AI Assistant - Settings</h1>
+            <p>Configure your AI assistant preferences</p>
+        </div>
+        
+        <form class="llm-helper-options-form" id="llm-helper-options-form">
+            <div class="llm-helper-section">
+                <h2>AI Configuration</h2>
+                <div class="llm-helper-field-group">
+                    <label for="llm-helper-api-key">API Key:</label>
+                    <input type="password" id="llm-helper-api-key" name="apiKey" placeholder="Enter your AI service API key">
+                    <small>Your API key will be stored securely and used for AI requests</small>
+                </div>
+                
+                <div class="llm-helper-field-group">
+                    <label for="llm-helper-ai-model">AI Model:</label>
+                    <select id="llm-helper-ai-model" name="aiModel">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                        <option value="gpt-4">GPT-4</option>
+                        <option value="claude-3">Claude 3</option>
+                        <option value="custom">Custom Model</option>
+                    </select>
+                    <small>Choose the AI model to use for generating responses</small>
+                </div>
+            </div>
+            
+            <div class="llm-helper-section">
+                <h2>Response Settings</h2>
+                <div class="llm-helper-field-group">
+                    <label for="llm-helper-reply-tone">Default Reply Tone:</label>
+                    <select id="llm-helper-reply-tone" name="replyTone">
+                        <option value="professional">Professional</option>
+                        <option value="friendly">Friendly</option>
+                        <option value="formal">Formal</option>
+                        <option value="casual">Casual</option>
+                    </select>
+                    <small>Default tone for AI-generated replies</small>
+                </div>
+                
+                <div class="llm-helper-field-group">
+                    <label for="llm-helper-summary-length">Summary Length:</label>
+                    <select id="llm-helper-summary-length" name="summaryLength">
+                        <option value="brief">Brief (1-2 sentences)</option>
+                        <option value="medium">Medium (3-5 sentences)</option>
+                        <option value="detailed">Detailed (6+ sentences)</option>
+                    </select>
+                    <small>Preferred length for email summaries</small>
+                </div>
+            </div>
+            
+            <div class="llm-helper-section">
+                <h2>Privacy & Security</h2>
+                <div class="llm-helper-field-group">
+                    <label class="llm-helper-checkbox-label">
+                        <input type="checkbox" id="llm-helper-privacy-mode" name="privacyMode">
+                        <span class="llm-helper-checkbox-custom"></span>
+                        Privacy Mode
+                    </label>
+                    <small>When enabled, sensitive information will be filtered before sending to AI</small>
+                </div>
+                
+                <div class="llm-helper-field-group">
+                    <label class="llm-helper-checkbox-label">
+                        <input type="checkbox" id="llm-helper-data-retention" name="dataRetention">
+                        <span class="llm-helper-checkbox-custom"></span>
+                        Allow Data Retention
+                    </label>
+                    <small>Allow AI service to retain data for improving responses (not recommended for sensitive emails)</small>
+                </div>
+            </div>
+            
+            <div class="llm-helper-actions">
+                <button type="submit" class="llm-helper-save-button">Save Settings</button>
+                <button type="button" class="llm-helper-reset-button" id="llm-helper-reset-button">Reset to Defaults</button>
+            </div>
+            
+            <div class="llm-helper-status" id="llm-helper-status"></div>
+        </form>
+    </div>
+    
+    <script type="module" src="options.js"></script>
+</body>
+</html>

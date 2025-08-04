@@ -1,0 +1,26 @@
+{
+    "extensionName": {
+        "message": "Aivi, your Thunderbird AI Assistant",
+        "description": "Name of the extension"
+    },
+    "extensionDescription": {
+        "message": "An AI-powered assistant for Thunderbird to help you manage emails more efficiently",
+        "description": "Description of the extension"
+    },
+    "replyButtonText": {
+        "message": "Generate Reply",
+        "description": "Text for the reply button"
+    },
+    "summaryButtonText": {
+        "message": "Generate Summary",
+        "description": "Text for the summary button"
+    },
+    "generateButtonText": {
+        "message": "Generate",
+        "description": "Text for the generate button"
+    },
+    "aiAssistantTitle": {
+        "message": "AI Assistant",
+        "description": "Title for the AI assistant panel"
+    }
+}

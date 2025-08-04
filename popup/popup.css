@@ -1,0 +1,72 @@
+/* File: /popup/popup.css */
+
+.llm-helper-popup-container {
+    width: 280px;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.llm-helper-popup-header {
+    text-align: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 12px;
+}
+
+.llm-helper-popup-header h3 {
+    margin: 0;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.llm-helper-popup-content {
+    text-align: center;
+}
+
+.llm-helper-popup-content p {
+    margin: 0 0 16px 0;
+    color: #666666;
+    font-size: 14px;
+}
+
+.llm-helper-button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.llm-helper-action-button {
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0078d4;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-height: 40px;
+}
+
+.llm-helper-action-button:hover {
+    background-color: #106ebe;
+}
+
+.llm-helper-action-button:active {
+    background-color: #005a9e;
+}
+
+.llm-helper-action-button:focus {
+    outline: 2px solid #0078d4;
+    outline-offset: 2px;
+}
+
+.llm-helper-action-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}

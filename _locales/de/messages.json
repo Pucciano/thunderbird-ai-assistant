@@ -1,0 +1,26 @@
+{
+    "extensionName": {
+        "message": "Aivi, Ihr Thunderbird AI-Assistent",
+        "description": "Name der Erweiterung"
+    },
+    "extensionDescription": {
+        "message": "Ein KI-unterstützter Assistent für Thunderbird, der Ihnen hilft, E-Mails effizienter zu verwalten",
+        "description": "Beschreibung der Erweiterung"
+    },
+    "replyButtonText": {
+        "message": "Antwort generieren",
+        "description": "Text für den Antwort-Button"
+    },
+    "summaryButtonText": {
+        "message": "Zusammenfassung generieren",
+        "description": "Text für den Zusammenfassung-Button"
+    },
+    "generateButtonText": {
+        "message": "Generieren",
+        "description": "Text für den Generieren-Button"
+    },
+    "aiAssistantTitle": {
+        "message": "KI-Assistent",
+        "description": "Titel für das KI-Assistenten-Panel"
+    }
+}

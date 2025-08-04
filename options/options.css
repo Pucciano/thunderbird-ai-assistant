@@ -1,0 +1,230 @@
+/* File: /options/options.css */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    color: #333333;
+}
+
+.llm-helper-options-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.llm-helper-options-header {
+    background: linear-gradient(135deg, #0078d4, #106ebe);
+    color: white;
+    padding: 32px;
+    text-align: center;
+}
+
+.llm-helper-options-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.llm-helper-options-header p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.llm-helper-options-form {
+    padding: 32px;
+}
+
+.llm-helper-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.llm-helper-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 24px;
+}
+
+.llm-helper-section h2 {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.llm-helper-field-group {
+    margin-bottom: 20px;
+}
+
+.llm-helper-field-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.llm-helper-field-group input[type="text"],
+.llm-helper-field-group input[type="password"],
+.llm-helper-field-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.llm-helper-field-group input[type="text"]:focus,
+.llm-helper-field-group input[type="password"]:focus,
+.llm-helper-field-group select:focus {
+    outline: none;
+    border-color: #0078d4;
+    box-shadow: 0 0 0 3px rgba(0, 120, 212, 0.1);
+}
+
+.llm-helper-field-group small {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.llm-helper-checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+}
+
+.llm-helper-checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.llm-helper-checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.llm-helper-checkbox-label input[type="checkbox"]:checked + .llm-helper-checkbox-custom {
+    background-color: #0078d4;
+    border-color: #0078d4;
+}
+
+.llm-helper-checkbox-label input[type="checkbox"]:checked + .llm-helper-checkbox-custom::after {
+    content: "✓";
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.llm-helper-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.llm-helper-save-button {
+    background: #0078d4;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 120px;
+}
+
+.llm-helper-save-button:hover:not(:disabled) {
+    background: #106ebe;
+}
+
+.llm-helper-save-button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.llm-helper-reset-button {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    min-width: 120px;
+}
+
+.llm-helper-reset-button:hover {
+    background: #e5e7eb;
+}
+
+.llm-helper-status {
+    margin-top: 16px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    display: none;
+}
+
+.llm-helper-status.success {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    display: block;
+}
+
+.llm-helper-status.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
+    .llm-helper-options-form {
+        padding: 20px;
+    }
+    
+    .llm-helper-options-header {
+        padding: 20px;
+    }
+    
+    .llm-helper-actions {
+        flex-direction: column;
+    }
+    
+    .llm-helper-save-button,
+    .llm-helper-reset-button {
+        width: 100%;
+    }
+}
