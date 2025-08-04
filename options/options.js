@@ -147,7 +147,7 @@ function showStatus(message, type) {
     
     // Hide status after 5 seconds
     setTimeout(() => {
-        statusDiv.style.display = 'none';
+        statusDiv.className = 'llm-helper-status';
     }, 5000);
 }
 
