@@ -165,7 +165,7 @@ function showAIPanel(mode) {
     
     const closeButton = document.createElement('button');
     closeButton.className = 'llm-helper-panel-close';
-    closeButton.innerHTML = '×';
+    closeButton.textContent = '×';
     closeButton.title = 'Close';
     closeButton.addEventListener('click', () => {
         panel.remove();
