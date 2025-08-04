@@ -5,6 +5,114 @@ console.log("AI Assistant - Message display script loaded");
 // Global reference to the current panel
 let currentPanel = null;
 
+// Function to extract email content from the message display
+async function extractEmailContent() {
+    try {
+        console.log("Extracting email content...");
+        
+        // First try to request the actual message data from the background script
+        let messageData = null;
+        try {
+            messageData = await browser.runtime.sendMessage({
+                cmd: "getMessageContent"
+            });
+            console.log("Received message data from background:", messageData);
+        } catch (apiError) {
+            console.log("Could not get message via API, falling back to DOM extraction:", apiError);
+        }
+        
+        // Get basic message text content from the DOM as fallback
+        const messageBody = document.body;
+        let textContent = '';
+        let htmlContent = '';
+        
+        // Try to find the message content area
+        const messageElements = [
+            messageBody.querySelector('.moz-text-plain'),
+            messageBody.querySelector('.moz-text-html'),
+            messageBody.querySelector('[class*="message"]'),
+            messageBody.querySelector('body'),
+            messageBody
+        ].filter(Boolean);
+        
+        if (messageElements.length > 0) {
+            const messageElement = messageElements[0];
+            textContent = messageElement.innerText || messageElement.textContent || '';
+            htmlContent = messageElement.innerHTML || '';
+        }
+        
+        // Extract headers from DOM
+        const headers = {};
+        try {
+            // Look for various header formats
+            const headerSelectors = [
+                '.headerName, .headerValue',
+                '.message-header-name, .message-header-value',
+                '[class*="header"]'
+            ];
+            
+            for (const selector of headerSelectors) {
+                const headerElements = document.querySelectorAll(selector);
+                if (headerElements.length >= 2) {
+                    for (let i = 0; i < headerElements.length - 1; i += 2) {
+                        const nameEl = headerElements[i];
+                        const valueEl = headerElements[i + 1];
+                        if (nameEl && valueEl) {
+                            const headerName = nameEl.textContent?.trim().replace(':', '');
+                            const headerValue = valueEl.textContent?.trim();
+                            if (headerName && headerValue) {
+                                headers[headerName] = headerValue;
+                            }
+                        }
+                    }
+                    break; // Stop after finding the first working selector
+                }
+            }
+            
+            // Also try to extract from meta tags or other sources
+            const subjectMeta = document.querySelector('meta[name="subject"]');
+            const fromMeta = document.querySelector('meta[name="from"]');
+            const dateMeta = document.querySelector('meta[name="date"]');
+            
+            if (subjectMeta) headers.Subject = subjectMeta.content;
+            if (fromMeta) headers.From = fromMeta.content;
+            if (dateMeta) headers.Date = dateMeta.content;
+            
+        } catch (headerError) {
+            console.log("Could not extract headers from DOM:", headerError);
+        }
+        
+        // Combine API data with DOM extraction
+        const result = {
+            textContent: (messageData?.textContent || textContent).trim(),
+            htmlContent: messageData?.htmlContent || htmlContent,
+            headers: { ...headers, ...(messageData?.headers || {}) },
+            extractedAt: new Date().toISOString(),
+            source: messageData ? 'api+dom' : 'dom-only'
+        };
+        
+        console.log("Extracted email content:", {
+            textLength: result.textContent.length,
+            htmlLength: result.htmlContent.length,
+            headerCount: Object.keys(result.headers).length,
+            source: result.source
+        });
+        
+        return result;
+        
+    } catch (error) {
+        console.error("Error extracting email content:", error);
+        return {
+            textContent: '',
+            htmlContent: '',
+            headers: {},
+            error: error.message,
+            extractedAt: new Date().toISOString(),
+            source: 'error'
+        };
+    }
+}
+
 // Listen for messages from background script
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log("Content script received message:", message);
@@ -143,11 +251,15 @@ async function handleGenerate(mode, textarea, panel) {
     content.appendChild(resultArea);
     
     try {
+        // Extract email content from the current message
+        const emailContent = await extractEmailContent();
+        
         // Send message to background script to generate AI response
         const command = mode === 'reply' ? 'generateReply' : 'generateSummary';
         const response = await browser.runtime.sendMessage({
             cmd: command,
-            prompt: prompt
+            prompt: prompt,
+            emailContent: emailContent
         });
         
         console.log("AI generation response:", response);
