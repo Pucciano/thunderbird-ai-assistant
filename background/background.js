@@ -138,6 +138,19 @@ async function handleCommand(message, sender) {
                 // Pass both user prompt and email content to AI summary generation
                 return await generateAISummary(message.prompt, message.emailContent, sender);
                 
+            case "generateComposeReply":
+                console.log("Generate compose reply request:", message.prompt);
+                // Generate AI reply for compose window
+                return await generateComposeReply(message.prompt, sender);
+                
+            case "showPostInsertionPanel":
+                console.log("Show post-insertion panel request");
+                return await showPostInsertionPanel(message.generatedText, message.originalPrompt, sender);
+                
+            case "handlePostInsertionAction":
+                console.log("Handle post-insertion action:", message.action);
+                return await handlePostInsertionAction(message.action, message.generatedText, message.originalPrompt, sender);
+                
             default:
                 console.warn("Unknown command:", cmd);
                 return false;
@@ -160,6 +173,8 @@ async function generateAIReply(userPrompt, emailContent, sender) {
         
         // This is where you would integrate with your AI service
         // For now, return a more detailed placeholder response showing the content was received
+        // This is a placeholder response that would be replaced with actual AI-generated reply
+        // TODO: replace with actual AI generation logic
         return {
             success: true,
             reply: `AI Reply (Placeholder):\n\nBased on the email content:\nSubject: ${emailContent?.headers?.Subject || 'N/A'}\nFrom: ${emailContent?.headers?.From || 'N/A'}\n\nEmail excerpt: "${emailContent?.textContent?.substring(0, 200) || 'No content'}..."\n\nUser instructions: "${userPrompt || 'None'}"\n\n[This would be replaced with actual AI-generated reply]`,
@@ -189,6 +204,8 @@ async function generateAISummary(userPrompt, emailContent, sender) {
         
         // This is where you would integrate with your AI service
         // For now, return a more detailed placeholder response showing the content was received
+        // This is a placeholder response that would be replaced with actual AI-generated summary
+        //TODO: replace with actual AI generation logic
         return {
             success: true,
             summary: `AI Summary (Placeholder):\n\nEmail Details:\n- Subject: ${emailContent?.headers?.Subject || 'N/A'}\n- From: ${emailContent?.headers?.From || 'N/A'}\n- Date: ${emailContent?.headers?.Date || 'N/A'}\n\nContent Summary: "${emailContent?.textContent?.substring(0, 300) || 'No content available'}..."\n\nUser focus: "${userPrompt || 'General summary'}"\n\n[This would be replaced with actual AI-generated summary]`,
@@ -284,6 +301,7 @@ async function getMessageContentForTab(sender) {
 }
 
 // Helper function to construct AI context from user prompt and email content
+// This will be used to provide context for AI generation
 function constructAIContext(userPrompt, emailContent, mode) {
     const context = [];
     
@@ -319,6 +337,306 @@ function constructAIContext(userPrompt, emailContent, mode) {
     }
     
     return context.join('\n');
+}
+
+// Function to generate AI reply for compose window
+async function generateComposeReply(prompt, sender) {
+    try {
+        console.log("=== AI Compose Reply Generation ===");
+        console.log("User prompt:", prompt);
+        
+        // For compose window, we generate based on the prompt alone
+        // This is different from the message display reply which uses email content
+        const aiPrompt = `Generate an email based on this request: "${prompt}"
+        
+Please write a professional email that addresses the request. Make it clear, concise, and appropriate for business communication.`;
+        
+        // This is where the intergration with the AI service will live
+        // For now, return a placeholder response that incorporates the prompt
+        // TODO: Replace with actual AI generation logic
+        return {
+            success: true,
+            reply: `Subject: ${getSubjectFromPrompt(prompt)}
+
+Dear [Recipient],
+
+${generateEmailBodyFromPrompt(prompt)}
+
+Best regards,
+[Your name]`,
+            prompt: prompt
+        };
+    } catch (error) {
+        console.error("Error in generateComposeReply:", error);
+        return {
+            success: false,
+            error: error.message,
+            prompt: prompt
+        };
+    }
+}
+
+// Helper function to generate subject from prompt
+// This is a simplified version for development purposes
+// Later, this will be replaced with the LLM-API integration
+// TODO: Replace with actual AI generation logic
+function getSubjectFromPrompt(prompt) {
+    const lowerPrompt = prompt.toLowerCase();
+    
+    if (lowerPrompt.includes('short and friendly')) {
+        return "Quick Update";
+    } else if (lowerPrompt.includes('request more information')) {
+        return "Information Request";
+    } else if (lowerPrompt.includes('provide an update')) {
+        return "Status Update";
+    } else if (lowerPrompt.includes('make an announcement')) {
+        return "Important Announcement";
+    } else {
+        return "Re: Your Request";
+    }
+}
+
+// Helper function to generate email body from prompt
+// This is a simplified version for development purposes
+// Later, this will be replaced with the LLM-API integration
+// TODO: Replace with actual AI generation logic
+function generateEmailBodyFromPrompt(prompt) {
+    const lowerPrompt = prompt.toLowerCase();
+    
+    if (lowerPrompt.includes('short and friendly')) {
+        return `I hope this message finds you well.
+
+I wanted to reach out with a quick update. Everything is progressing smoothly on our end, and I'll keep you posted on any developments.
+
+Please let me know if you have any questions or if there's anything else I can help with.`;
+    } else if (lowerPrompt.includes('request more information')) {
+        return `I hope you're doing well.
+
+I'm writing to request some additional information regarding [topic]. Could you please provide more details about:
+
+- [Specific item 1]
+- [Specific item 2]
+- [Any other relevant details]
+
+This information would be very helpful for moving forward. Please let me know if you need any clarification on what I'm looking for.
+
+Thank you for your time and assistance.`;
+    } else if (lowerPrompt.includes('provide an update')) {
+        return `I wanted to provide you with an update on [project/topic].
+
+Here's where things currently stand:
+
+• [Progress item 1]
+• [Progress item 2]
+• [Next steps]
+
+The project is on track, and we expect [timeline/outcome]. I'll continue to keep you updated as we make progress.
+
+Please don't hesitate to reach out if you have any questions or concerns.`;
+    } else if (lowerPrompt.includes('make an announcement')) {
+        return `I hope this message reaches you well.
+
+I'm pleased to announce [announcement details]. This is an exciting development that will [impact/benefit].
+
+Key details:
+- [Detail 1]
+- [Detail 2]
+- [Timeline or next steps]
+
+I'm happy to answer any questions you might have about this announcement.`;
+    } else {
+        return `Thank you for your message.
+
+Based on your request: "${prompt}"
+
+[AI would generate an appropriate response here based on the specific context and requirements you've outlined.]
+
+Please let me know if you need any additional information or if there's anything else I can help you with.`;
+    }
+}
+
+// Function to show post-insertion control panel
+// This is called after inserting AI-generated text into the compose window
+// This is a simplified version for development purposes
+// Later, this will be replaced with the LLM-API integration
+// TODO: Replace with actual AI generation logic
+async function showPostInsertionPanel(generatedText, originalPrompt, sender) {
+    try {
+        console.log("Showing post-insertion panel");
+        
+        // Get the compose tab
+        const tabs = await messenger.tabs.query({ type: "messageCompose" });
+        if (tabs.length === 0) {
+            throw new Error("No compose window found");
+        }
+        
+        const composeTab = tabs[0];
+        
+        // Inject the floating panel script into the compose window
+        try {
+            const escapedGeneratedText = generatedText.replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/\r/g, "");
+            const escapedOriginalPrompt = originalPrompt.replace(/'/g, "\\'").replace(/\n/g, "\\n").replace(/\r/g, "");
+            
+            await messenger.tabs.executeScript(composeTab.id, {
+                code: `
+                    (function() {
+                        if (document.getElementById('ai-post-insertion-panel')) {
+                            document.getElementById('ai-post-insertion-panel').remove();
+                        }
+                        
+                        const panel = document.createElement('div');
+                        panel.id = 'ai-post-insertion-panel';
+                        panel.innerHTML = '<div class="ai-panel-header">AI Text Inserted</div>' +
+                            '<div class="ai-panel-section">' +
+                                '<button class="ai-panel-button ai-keep-button" data-action="keep">✔ keep text</button>' +
+                                '<button class="ai-panel-button ai-discard-button" data-action="discard">🗑 discard text</button>' +
+                            '</div>' +
+                            '<hr class="ai-panel-separator">' +
+                            '<div class="ai-panel-section">' +
+                                '<div class="ai-panel-section-header">Change content</div>' +
+                                '<button class="ai-panel-button ai-regenerate-button" data-action="regenerate">⟳ run generation again</button>' +
+                                '<button class="ai-panel-button ai-shorten-button" data-action="shorten">↘︎ shorten</button>' +
+                                '<button class="ai-panel-button ai-lengthen-button" data-action="lengthen">↗︎ lengthen</button>' +
+                            '</div>' +
+                            '<button class="ai-panel-close">×</button>';
+                        
+                        if (!document.getElementById('ai-panel-styles')) {
+                            const styles = document.createElement('style');
+                            styles.id = 'ai-panel-styles';
+                            styles.textContent = '#ai-post-insertion-panel { position: fixed; top: 20px; right: 20px; width: 250px; background: white; border: 1px solid #d1d5db; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); z-index: 10000; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; padding: 16px; }' +
+                                '.ai-panel-header { font-weight: 600; margin-bottom: 12px; color: #1f2937; }' +
+                                '.ai-panel-section { margin-bottom: 12px; }' +
+                                '.ai-panel-section-header { font-weight: 500; margin-bottom: 8px; color: #374151; font-size: 13px; }' +
+                                '.ai-panel-button { display: block; width: 100%; padding: 8px 12px; margin-bottom: 6px; border: 1px solid #e5e7eb; border-radius: 4px; background: #f9fafb; color: #374151; font-size: 13px; cursor: pointer; text-align: left; font-family: inherit; }' +
+                                '.ai-panel-button:hover { background: #f3f4f6; }' +
+                                '.ai-keep-button { background: #dcfce7; border-color: #22c55e; color: #15803d; }' +
+                                '.ai-discard-button { background: #fef2f2; border-color: #ef4444; color: #dc2626; }' +
+                                '.ai-panel-separator { border: none; height: 1px; background: #e5e7eb; margin: 12px 0; }' +
+                                '.ai-panel-close { position: absolute; top: 8px; right: 8px; background: none; border: none; font-size: 16px; cursor: pointer; color: #6b7280; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }' +
+                                '.ai-panel-close:hover { color: #374151; background: #f3f4f6; border-radius: 4px; }';
+                            document.head.appendChild(styles);
+                        }
+                        
+                        // Close button handler
+                        panel.querySelector('.ai-panel-close').addEventListener('click', function() {
+                            panel.remove();
+                        });
+                        
+                        // Action button handlers
+                        const generatedText = '${escapedGeneratedText}';
+                        const originalPrompt = '${escapedOriginalPrompt}';
+                        
+                        panel.querySelectorAll('.ai-panel-button').forEach(function(button) {
+                            button.addEventListener('click', function(e) {
+                                const action = e.target.dataset.action;
+                                
+                                browser.runtime.sendMessage({
+                                    cmd: 'handlePostInsertionAction',
+                                    action: action,
+                                    generatedText: generatedText,
+                                    originalPrompt: originalPrompt
+                                }).catch(function(error) {
+                                    console.error('Error sending post-insertion action:', error);
+                                });
+                                
+                                if (action === 'keep' || action === 'discard') {
+                                    panel.remove();
+                                }
+                            });
+                        });
+                        
+                        // Auto-remove panel after 30 seconds
+                        setTimeout(function() {
+                            if (document.getElementById('ai-post-insertion-panel')) {
+                                panel.remove();
+                            }
+                        }, 30000);
+                        
+                        document.body.appendChild(panel);
+                    })();
+                `
+            });
+            
+            console.log("Post-insertion panel injected successfully");
+            return { success: true };
+            
+        } catch (injectError) {
+            console.error("Error injecting post-insertion panel:", injectError);
+            return { success: false, error: injectError.message };
+        }
+        
+    } catch (error) {
+        console.error("Error showing post-insertion panel:", error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Function to handle post-insertion actions
+async function handlePostInsertionAction(action, generatedText, originalPrompt, sender) {
+    try {
+        console.log("Handling post-insertion action:", action);
+        
+        const tabs = await messenger.tabs.query({ type: "messageCompose" });
+        if (tabs.length === 0) {
+            throw new Error("No compose window found");
+        }
+        
+        const composeTab = tabs[0];
+        
+        switch (action) {
+            case 'keep':
+                // Text is already in the compose window, just acknowledge
+                console.log("User chose to keep the generated text");
+                return { success: true, message: "Text kept" };
+                
+            case 'discard':
+                // Clear the compose window body
+                await messenger.compose.setComposeDetails(composeTab.id, { body: '' });
+                console.log("Generated text discarded");
+                return { success: true, message: "Text discarded" };
+                
+            case 'regenerate':
+                // Generate new text with the same prompt
+                const newResponse = await generateComposeReply(originalPrompt, sender);
+                if (newResponse.success) {
+                    await messenger.compose.setComposeDetails(composeTab.id, { body: newResponse.reply });
+                    console.log("Text regenerated");
+                    return { success: true, message: "Text regenerated" };
+                } else {
+                    return { success: false, error: "Failed to regenerate text" };
+                }
+                
+            case 'shorten':
+                // Generate a shorter version
+                const shortenResponse = await generateComposeReply(originalPrompt + " (make it shorter and more concise)", sender);
+                if (shortenResponse.success) {
+                    await messenger.compose.setComposeDetails(composeTab.id, { body: shortenResponse.reply });
+                    console.log("Text shortened");
+                    return { success: true, message: "Text shortened" };
+                } else {
+                    return { success: false, error: "Failed to shorten text" };
+                }
+                
+            case 'lengthen':
+                // Generate a longer version
+                const lengthenResponse = await generateComposeReply(originalPrompt + " (make it more detailed and comprehensive)", sender);
+                if (lengthenResponse.success) {
+                    await messenger.compose.setComposeDetails(composeTab.id, { body: lengthenResponse.reply });
+                    console.log("Text lengthened");
+                    return { success: true, message: "Text lengthened" };
+                } else {
+                    return { success: false, error: "Failed to lengthen text" };
+                }
+                
+            default:
+                console.warn("Unknown post-insertion action:", action);
+                return { success: false, error: "Unknown action" };
+        }
+        
+    } catch (error) {
+        console.error("Error handling post-insertion action:", error);
+        return { success: false, error: error.message };
+    }
 }
 
 // Set up menu items

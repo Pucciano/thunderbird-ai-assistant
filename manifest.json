@@ -21,6 +21,11 @@
         "default_title": "AI Assistant",
         "default_icon": "images/icon.svg"
     },
+    "compose_action": {
+        "default_popup": "popup/composePopup.html",
+        "default_title": "AI Assistant",
+        "default_icon": "images/icon.svg"
+    },
 
     "permissions": [
         "messagesRead",
